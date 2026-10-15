@@ -74,7 +74,7 @@ public class OrderService implements OrderServiceImpl{
 
     @Override
     public double OrderTotal(Order or) {
-        try(Reader reader=new FileReader("data/orders_items.csv");
+        try(Reader reader=new FileReader("src/data/orders_items.csv");
             CSVParser parser= CSVFormat.DEFAULT.builder()
                     .setHeader()
                     .setSkipHeaderRecord(true)
@@ -101,7 +101,7 @@ public class OrderService implements OrderServiceImpl{
     }
     @Override
     public void SaveOrder(Order or) {
-        try(Writer writer=new FileWriter("data/orders.csv",true);
+        try(Writer writer=new FileWriter("src/data/orders.csv",true);
         CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)){
             int Id=or.getId();
             int CID=or.getCustomerId();
@@ -117,7 +117,7 @@ public class OrderService implements OrderServiceImpl{
 
     @Override
     public Order OrderSearch(int OrderId) {
-        try(Reader reader=new FileReader("data/orders.csv");
+        try(Reader reader=new FileReader("src/data/orders.csv");
         CSVParser parser=CSVFormat.DEFAULT.builder()
                 .setHeader()
                 .setSkipHeaderRecord(true)
@@ -145,7 +145,7 @@ public class OrderService implements OrderServiceImpl{
 
     @Override
     public Order[] ShowCustomerOrder(int CustomerId) {
-        try(Reader reader=new FileReader("data/orders.csv");
+        try(Reader reader=new FileReader("src/data/orders.csv");
             CSVParser parser=CSVFormat.DEFAULT.builder()
                     .setHeader()
                     .setSkipHeaderRecord(true)
@@ -190,7 +190,7 @@ public class OrderService implements OrderServiceImpl{
     public void CancelOrder(int OrderId) {
         CSVRecord[] records;
         String currentStatus = null;
-        try (Reader reader = new FileReader("data/orders.csv");
+        try (Reader reader = new FileReader("src/data/orders.csv");
              CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -215,7 +215,7 @@ public class OrderService implements OrderServiceImpl{
             throw new OrderNotFoundException("همچین سفارشی با این آیدی موجود نیست");
         }
         try (
-                Writer writer = new FileWriter("data/orders.csv");
+                Writer writer = new FileWriter("src/data/orders.csv");
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
         ) {
             printer.printRecord("id", "customerId", "totalPrice", "status");
@@ -239,7 +239,7 @@ public class OrderService implements OrderServiceImpl{
     }
     @Override
     public void CompleteOrder(int OrderId) {
-        try (Reader reader = new FileReader("data/orders.csv");
+        try (Reader reader = new FileReader("src/data/orders.csv");
              CSVParser parser = CSVFormat.DEFAULT.builder()
                      .setHeader()
                      .setSkipHeaderRecord(true)
@@ -270,7 +270,7 @@ public class OrderService implements OrderServiceImpl{
                 throw new OrderNotFoundException("همچین سفارشی با این آیدی موجود نیست");
             }
 
-            try (Writer writer = new FileWriter("data/orders.csv");
+            try (Writer writer = new FileWriter("src/data/orders.csv");
                  CSVPrinter printer = new CSVPrinter(
                          writer, CSVFormat.DEFAULT)) {
 
@@ -298,7 +298,7 @@ public class OrderService implements OrderServiceImpl{
     }
     public Order[] ShowAllOrders(){
         try (
-                Reader reader = new FileReader("data/orders.csv");
+                Reader reader = new FileReader("src/data/orders.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -346,7 +346,7 @@ public class OrderService implements OrderServiceImpl{
     }
     public void SaveOrderItems(OrderItem[] items) {
         try (
-                Writer writer = new FileWriter("data/orders_items.csv", true);
+                Writer writer = new FileWriter("src/data/orders_items.csv", true);
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
         ) {
             for (int i = 0; i < items.length; i++) {
@@ -361,7 +361,7 @@ public class OrderService implements OrderServiceImpl{
     }
     public void RestoreStock(int OrderId) {
 
-        try (Reader reader = new FileReader("data/orders_items.csv");
+        try (Reader reader = new FileReader("src/data/orders_items.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)

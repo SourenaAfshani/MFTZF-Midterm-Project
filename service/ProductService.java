@@ -20,7 +20,7 @@ public class ProductService implements ProductServiceImpl{
     @Override
     public Product[] ShowAllProducts() {
         try (
-                Reader reader = new FileReader("data/products.csv");
+                Reader reader = new FileReader("src/data/products.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -59,7 +59,7 @@ public class ProductService implements ProductServiceImpl{
     @Override
     public Product  FindProductById(int id) {
         try (
-                Reader reader = new FileReader("data/products.csv");
+                Reader reader = new FileReader("src/data/products.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -95,7 +95,7 @@ public class ProductService implements ProductServiceImpl{
 
     @Override
     public void addProduct(Product pr) {
-        try(FileWriter writer=new FileWriter("data/products.csv",true);
+        try(FileWriter writer=new FileWriter("src/data/products.csv",true);
             CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)
         ){
             int id=pr.getId();
@@ -108,7 +108,6 @@ public class ProductService implements ProductServiceImpl{
 
                 throw new DuplicateIdException("این ایدی قبلا در فایل ذخیره شده است");
             } catch (ProductNotFoundException e) {
-                System.out.println("محصولی با این آیدی وجود ندارد");
             }
             printer.printRecord(id,name,category,price,quantity);
         }catch(IOException e){
@@ -126,7 +125,7 @@ public class ProductService implements ProductServiceImpl{
         FindProductById(pr.getId());
 
         try (
-                Reader reader = new FileReader("data/products.csv");
+                Reader reader = new FileReader("src/data/products.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -150,7 +149,7 @@ public class ProductService implements ProductServiceImpl{
             throw new RuntimeException("خطا در خواندن",e);
 
         }
-        try(FileWriter writer=new FileWriter("data/products.csv");
+        try(FileWriter writer=new FileWriter("src/data/products.csv");
             CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)){
             printer.printRecord("id","name","category","price","quantity");
             for(int j=0;j<index;j++){
@@ -174,7 +173,7 @@ public class ProductService implements ProductServiceImpl{
         CSVRecord[] records;
 
         try (
-                Reader reader = new FileReader("data/products.csv");
+                Reader reader = new FileReader("src/data/products.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -188,7 +187,7 @@ public class ProductService implements ProductServiceImpl{
         }
 
         try (
-                FileWriter writer = new FileWriter("data/products.csv");
+                FileWriter writer = new FileWriter("src/data/products.csv");
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
         ) {
             printer.printRecord("id", "name", "category", "price", "quantity");
@@ -219,17 +218,13 @@ public class ProductService implements ProductServiceImpl{
 
     public void QuantityReducer(Product pr, int quantity) {
         FindProductById(pr.getId());
-
         if (quantity <= 0) {
             throw new IllegalArgumentException("تعداد باید بیشتر از صفر باشد.");
         }
-
         if (pr.getQuantity() < quantity) {
             throw new InsufficientStockException("موجودی کالا کافی نیست.");
         }
-
         int newQuantity = pr.getQuantity() - quantity;
-
         Product newProduct = new Product(
                 pr.getId(),
                 pr.getName(),
@@ -237,7 +232,6 @@ public class ProductService implements ProductServiceImpl{
                 pr.getPrice(),
                 newQuantity
         );
-
         editProduct(newProduct);
     }
     public Product[] ShowLowStockProducts(){
