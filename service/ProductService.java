@@ -103,12 +103,16 @@ public class ProductService implements ProductServiceImpl{
             String category=pr.getCategory();
             double price=pr.getPrice();
             int quantity=pr.getQuantity();
-            if(FindProductById(id)!=null){
+            try {
+                FindProductById(id);
+
                 throw new DuplicateIdException("این ایدی قبلا در فایل ذخیره شده است");
+            } catch (ProductNotFoundException e) {
+                System.out.println("محصولی با این آیدی وجود ندارد");
             }
             printer.printRecord(id,name,category,price,quantity);
         }catch(IOException e){
-            System.out.println(e);
+            throw new RuntimeException("خطا در ذخیره فایل", e);
 
         }
 
@@ -157,7 +161,7 @@ public class ProductService implements ProductServiceImpl{
                 );
             }
         }catch(Exception e){
-            System.out.println(e);
+            throw new RuntimeException("خطا در ذخیره فایل", e);
         }
 
     }

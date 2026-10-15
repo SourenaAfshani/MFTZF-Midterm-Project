@@ -86,8 +86,12 @@ public class CustomerService implements CustomerServiceImpl{
             int id=cr.getId();
             String name= cr.getName();
             String phone=cr.getPhoneNumber();
-            if(FindCustomerById(id)!=null){
+            try {
+                FindCustomerById(id);
                 throw new DuplicateIdException("این ایدی قبلا در فایل ذخیره شده است");
+
+            } catch (ProductNotFoundException e) {
+                System.out.println("مشتری با این آیدی وجود ندارد");
             }
             printer.printRecord(id,name,phone);
 
