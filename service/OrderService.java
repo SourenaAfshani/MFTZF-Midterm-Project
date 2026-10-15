@@ -70,7 +70,7 @@ public class OrderService implements OrderServiceImpl{
 
     @Override
     public double OrderTotal(Order or) {
-        try(Reader reader=new FileReader("data/order_items.csv");
+        try(Reader reader=new FileReader("data/orders_items.csv");
             CSVParser parser= CSVFormat.DEFAULT.builder()
                     .setHeader()
                     .setSkipHeaderRecord(true)
@@ -305,7 +305,7 @@ public class OrderService implements OrderServiceImpl{
                 CSVRecord record = records[i];
                 int id=Integer.parseInt(record.get("id"));
                 int customerid=Integer.parseInt(record.get("customerId"));
-                double totalprice=Double.parseDouble(record.get("price"));
+                double totalprice=Double.parseDouble(record.get("totalprice"));
                 String status=record.get("status");
                 Order or=new Order(id,customerid,totalprice,status);
                 orders[index]=or;
