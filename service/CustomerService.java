@@ -91,7 +91,6 @@ public class CustomerService implements CustomerServiceImpl{
                 throw new DuplicateIdException("این ایدی قبلا در فایل ذخیره شده است");
 
             } catch (ProductNotFoundException e) {
-                System.out.println("مشتری با این آیدی وجود ندارد");
             }
             printer.printRecord(id,name,phone);
 
@@ -112,7 +111,7 @@ public class CustomerService implements CustomerServiceImpl{
         FindCustomerById(cr.getId());
 
         try (
-                Reader reader = new FileReader("data/customers.csv");
+                Reader reader = new FileReader("src/data/customers.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -136,7 +135,7 @@ public class CustomerService implements CustomerServiceImpl{
             throw new RuntimeException("خطا در خواندن",e);
 
         }
-        try(FileWriter writer=new FileWriter("data/customers.csv");
+        try(FileWriter writer=new FileWriter("src/data/customers.csv");
             CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)){
             printer.printRecord("id","name","phone");
             for(int j=0;j<index;j++){
@@ -158,7 +157,7 @@ public class CustomerService implements CustomerServiceImpl{
         CSVRecord[] records;
 
         try (
-                Reader reader = new FileReader("data/customers.csv");
+                Reader reader = new FileReader("src/data/customers.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
@@ -172,7 +171,7 @@ public class CustomerService implements CustomerServiceImpl{
         }
 
         try (
-                FileWriter writer = new FileWriter("data/customers.csv");
+                FileWriter writer = new FileWriter("src/data/customers.csv");
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
         ) {
             printer.printRecord("id", "name", "phone");
