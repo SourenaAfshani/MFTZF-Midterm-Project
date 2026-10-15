@@ -10,5 +10,4 @@ public interface CustomerServiceImpl {
     public void addCustomer(Customer cr);
     public void removeCustomer(Customer cr);
     public void editCustomer(Customer cr);
-    public void SaveOrderItems(OrderItem[] items);
 }
