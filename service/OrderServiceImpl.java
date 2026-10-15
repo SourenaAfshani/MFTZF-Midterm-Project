@@ -17,6 +17,7 @@ public interface OrderServiceImpl {
     Order[] ShowAllOrders();
     double CalculateTotalSale();
     public void SaveOrderItems(OrderItem[] items);
+    public void RestoreStock(int OrderId);
 
 
 }

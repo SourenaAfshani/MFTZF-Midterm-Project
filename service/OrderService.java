@@ -188,48 +188,54 @@ public class OrderService implements OrderServiceImpl{
 
     @Override
     public void CancelOrder(int OrderId) {
-        try(Reader reader=new FileReader("data/orders.csv");
-        CSVParser parser=CSVFormat.DEFAULT.builder()
-                .setHeader()
-                .setSkipHeaderRecord(true)
-                .get().parse(reader)){
-            CSVRecord[] records=parser.getRecords().toArray(new CSVRecord[0]);
-            boolean OrderFound=false;
-            for(int i=0;i< records.length;i++){
-                CSVRecord record=records[i];
-                int id=Integer.parseInt(record.get("id"));
-                if(id==OrderId){
-                    OrderFound=true;
-                    String status=record.get("status");
+        CSVRecord[] records;
+        String currentStatus = null;
+        try (Reader reader = new FileReader("data/orders.csv");
+             CSVParser parser = CSVFormat.DEFAULT.builder()
+                        .setHeader()
+                        .setSkipHeaderRecord(true)
+                        .get()
+                        .parse(reader)
+        ) {
+            records = parser.getRecords().toArray(new CSVRecord[0]);
+            for (int i = 0; i < records.length; i++) {
+                CSVRecord record = records[i];
+                int id = Integer.parseInt(record.get("id"));
+                if (id == OrderId) {
+                    currentStatus = record.get("status");
+                    break;
                 }
             }
-            if(OrderFound==false){
-                throw new OrderNotFoundException("همچین سفارشی با این آیدی موجود نیست");
-            }
-            try(Writer writer=new FileWriter("data/orders.csv");
-                CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)){
-                printer.printRecord("id","customerId","totalPrice","status");
-                for(int i=0;i<records.length;i++) {
-                    CSVRecord record2=records[i];
-                    String status = record2.get("status");
-                    int id = Integer.parseInt(record2.get("id"));
-                    if (id == OrderId) {
-                        status = "Canceled";
-                    }
-                    printer.printRecord(record2.get("id"),record2.get("customerId"),
-                            record2.get("totalPrice"),status);
+
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در خواندن فایل سفارش‌ها", e);
+        }
+
+        if (currentStatus == null) {
+            throw new OrderNotFoundException("همچین سفارشی با این آیدی موجود نیست");
+        }
+        try (
+                Writer writer = new FileWriter("data/orders.csv");
+                CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
+        ) {
+            printer.printRecord("id", "customerId", "totalPrice", "status");
+
+            for (int i = 0; i < records.length; i++) {
+                CSVRecord record = records[i];
+                int id = Integer.parseInt(record.get("id"));
+                String status = record.get("status");
+                if (id == OrderId) {
+                    status = "Canceled";
                 }
-
+                printer.printRecord(record.get("id"), record.get("customerId")
+                        , record.get("totalPrice"),
+                        status);
             }
 
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در ذخیره سفارش‌ها", e);
         }
-        catch(IOException e){
-            throw new RuntimeException("خطا در خواندن فایل",e);
-
-        }
-
-
-
+        RestoreStock(OrderId);
     }
     @Override
     public void CompleteOrder(int OrderId) {
@@ -351,6 +357,35 @@ public class OrderService implements OrderServiceImpl{
             }
         } catch (IOException e) {
             throw new RuntimeException("خطا در ذخیره جزئیات سفارش", e);
+        }
+    }
+    public void RestoreStock(int OrderId) {
+
+        try (Reader reader = new FileReader("data/orders_items.csv");
+                CSVParser parser = CSVFormat.DEFAULT.builder()
+                        .setHeader()
+                        .setSkipHeaderRecord(true)
+                        .get()
+                        .parse(reader)
+        ) {
+            CSVRecord[] records = parser.getRecords().toArray(new CSVRecord[0]);
+            for (int i = 0; i < records.length; i++) {
+                CSVRecord record = records[i];
+                int orderId = Integer.parseInt(record.get("orderId"));
+                if (orderId == OrderId) {
+                    int productId = Integer.parseInt(record.get("productId"));
+                    int quantity = Integer.parseInt(record.get("quantity"));
+                    Product product = ps.FindProductById(productId);
+                    Product updatedProduct = new Product(product.getId(), product.getName(),
+                            product.getCategory(),
+                            product.getPrice(),
+                            product.getQuantity() + quantity);
+                    ps.editProduct(updatedProduct);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در بازگرداندن موجودی محصولات", e);
         }
     }
 
