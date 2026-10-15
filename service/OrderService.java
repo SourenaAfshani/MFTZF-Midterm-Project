@@ -37,6 +37,9 @@ public class OrderService implements OrderServiceImpl{
 
         for (int i = 0; i < items.length; i++) {
             items[i].setOrderId(OrderId);
+
+            Product product = ps.FindProductById(items[i].getProductId());
+            items[i].setUnitPrice(product.getPrice());
         }
         double totalPrice = 0;
 
@@ -46,6 +49,7 @@ public class OrderService implements OrderServiceImpl{
         }
 
         Order order = new Order(OrderId, CustomerId,totalPrice, "Pending");
+        SaveOrderItems(items);
         SaveOrder(order);
         for(int i=0;i<items.length;i++){
             Product product=ps.FindProductById(items[i].getProductId());
@@ -101,7 +105,7 @@ public class OrderService implements OrderServiceImpl{
         CSVPrinter printer=new CSVPrinter(writer,CSVFormat.DEFAULT)){
             int Id=or.getId();
             int CID=or.getCustomerId();
-            double TotalPrice=OrderTotal(or);
+            double TotalPrice = or.getTotalPrice();
             String Status=or.getStatus();
             printer.printRecord(Id,CID,TotalPrice,Status);
         }
@@ -305,7 +309,7 @@ public class OrderService implements OrderServiceImpl{
                 CSVRecord record = records[i];
                 int id=Integer.parseInt(record.get("id"));
                 int customerid=Integer.parseInt(record.get("customerId"));
-                double totalprice=Double.parseDouble(record.get("totalprice"));
+                double totalprice=Double.parseDouble(record.get("totalPrice"));
                 String status=record.get("status");
                 Order or=new Order(id,customerid,totalprice,status);
                 orders[index]=or;
@@ -333,6 +337,21 @@ public class OrderService implements OrderServiceImpl{
         }
         return TotalSale;
 
+    }
+    public void SaveOrderItems(OrderItem[] items) {
+        try (
+                Writer writer = new FileWriter("data/orders_items.csv", true);
+                CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)
+        ) {
+            for (int i = 0; i < items.length; i++) {
+                OrderItem item = items[i];
+                printer.printRecord(
+                        item.getOrderId(),
+                        item.getProductId(), item.getQuantity(), item.getUnitPrice());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در ذخیره جزئیات سفارش", e);
+        }
     }
 
 }

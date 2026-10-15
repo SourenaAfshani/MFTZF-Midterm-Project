@@ -1,6 +1,7 @@
 package service;
 
 import model.Customer;
+import model.OrderItem;
 import model.Product;
 
 public interface CustomerServiceImpl {
@@ -9,4 +10,5 @@ public interface CustomerServiceImpl {
     public void addCustomer(Customer cr);
     public void removeCustomer(Customer cr);
     public void editCustomer(Customer cr);
+    public void SaveOrderItems(OrderItem[] items);
 }
