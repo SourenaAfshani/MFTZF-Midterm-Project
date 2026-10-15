@@ -13,7 +13,7 @@ public class Main {
         Scanner input=new Scanner(System.in);
         ProductService ps=new ProductService();
         CustomerService cs=new CustomerService();
-        OrderService os=new OrderService();
+        OrderService os=new OrderService(cs,ps);
         MidTerm:
         while(true){
             Menu();
@@ -48,6 +48,7 @@ public class Main {
                         case 3:
                             System.out.println("ایدی کالا خود را وارد کنید");
                             int productAddID=input.nextInt();
+                            input.nextLine();
                             System.out.println("نام کالا را وارد کنید");
                             String productAddName=input.nextLine();
                             System.out.println("دسته بندی کالا را وارد کنید");
@@ -66,6 +67,7 @@ public class Main {
                             System.out.println("آیدی کالا را وارد کنید");
                             int productEditId=input.nextInt();
                             ps.FindProductById(productEditId);
+                            input.nextLine();
                             System.out.print("نام جدید کالا را وارد کنی");
                             String productEditName = input.nextLine();
                             System.out.print("دسته بندی جدید کالا را وارد کنید ");
@@ -91,11 +93,8 @@ public class Main {
                         default:
                             System.out.println("ورودی اشتباه");
 
-
-
-
-
                     }
+                    break;
                 case 2:
                     CustomerMenu();
                     int CustomerMenuInput=input.nextInt();
@@ -112,6 +111,7 @@ public class Main {
                         case 2:
                             System.out.println("ایدی مشتری خود را وارد کنید");
                             int customerAddID=input.nextInt();
+                            input.nextLine();
                             System.out.println("نام مشتری را وارد کنید");
                             String customerAddName=input.nextLine();
                             System.out.println("شماره موبایل مشتری را وارد کنید");
@@ -128,6 +128,7 @@ public class Main {
                             System.out.println("آیدی مشتری را وارد کنید");
                             int customerEditId=input.nextInt();
                             cs.FindCustomerById(customerEditId);
+                            input.nextLine();
                             System.out.println("نام جدید را وارد کنید");
                             String customerEditName=input.nextLine();
                             System.out.println("شماره تلفن جدید را وارد کنید");
@@ -147,6 +148,7 @@ public class Main {
                             System.out.println("ورودی اشتباه");
 
                     }
+                    break;
                 case 3:
                     OrderMenu();
                     int OrderMenuInput=input.nextInt();
@@ -215,12 +217,14 @@ public class Main {
                             System.out.println("آیدی سفازش را وارد کنید");
                             int OrderIdStatusComplete=input.nextInt();
                             os.CompleteOrder(OrderIdStatusComplete);
+                            break;
                         case 6:
                             break;
                         default:
                             System.out.println("ورودی اشتباه");
 
                     }
+                    break;
                 case 4:
                     ReportMenu();
                     int ReportMenuInput=input.nextInt();
@@ -250,10 +254,13 @@ public class Main {
                         case 3:
                             System.out.println(os.CalculateTotalSale());
                             break;
+                        case 4:
+                            break;
                         default:
                             System.out.println("ورودی اشتباه");
 
                     }
+                    break;
                 case 5:
                     break MidTerm;
 

@@ -17,6 +17,10 @@ import java.io.*;
 public class OrderService implements OrderServiceImpl{
     CustomerService cs;
     ProductService ps;
+    public OrderService(CustomerService cs, ProductService ps) {
+        this.cs = cs;
+        this.ps = ps;
+    }
     @Override
     public Order NewOrder(int OrderId, int CustomerId, OrderItem[] items) {
         cs.FindCustomerById(CustomerId);
@@ -77,7 +81,7 @@ public class OrderService implements OrderServiceImpl{
             double total=0;
             for(int i=0;i<records.length;i++) {
                 CSVRecord record = records[i];
-                int ID = Integer.parseInt(record.get("id"));
+                int ID = Integer.parseInt(record.get("orderId"));
                 if(ID==or.getId()) {
                     double price = Double.parseDouble(record.get("unitprice"));
                     int quantity = Integer.parseInt(record.get("quantity"));
@@ -284,7 +288,7 @@ public class OrderService implements OrderServiceImpl{
     }
     public Order[] ShowAllOrders(){
         try (
-                Reader reader = new FileReader("data/products.csv");
+                Reader reader = new FileReader("data/orders.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
