@@ -1,5 +1,6 @@
 package service;
 
+import exception.CustomerNotFoundException;
 import exception.DuplicateIdException;
 import exception.ProductNotFoundException;
 import model.Customer;
@@ -68,7 +69,7 @@ public class CustomerService implements CustomerServiceImpl{
 
             }
             if(cr==null){
-                throw new ProductNotFoundException("هیچ مشتری ای با این ایدی پیدا نشد");
+                throw new CustomerNotFoundException("هیچ مشتری ای با این ایدی پیدا نشد");
             }
             return cr;
 
