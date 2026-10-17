@@ -23,7 +23,10 @@ public class OrderService implements OrderServiceImpl{
     }
     @Override
     public Order NewOrder(int OrderId, int CustomerId, OrderItem[] items) {
+        try{
         cs.FindCustomerById(CustomerId);
+        }catch(CustomerNotFoundException e){
+        }
 
         for (int i = 0; i < items.length; i++) {
             OrderItem item = items[i];
@@ -271,8 +274,7 @@ public class OrderService implements OrderServiceImpl{
             }
 
             try (Writer writer = new FileWriter("src/data/orders.csv");
-                 CSVPrinter printer = new CSVPrinter(
-                         writer, CSVFormat.DEFAULT)) {
+                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
 
                 printer.printRecord("id", "customerId", "totalPrice", "status");
 
