@@ -1,6 +1,7 @@
 package view;
 
 import exception.CustomerNotFoundException;
+import exception.DuplicateIdException;
 import model.Customer;
 import service.CustomerService;
 
@@ -47,12 +48,22 @@ public class CustomerMenu {
         System.out.println("شماره موبایل مشتری را وارد کنید");
         String customerAddPhone=input.nextLine();
         Customer csAdd=new Customer(customerAddID,customerAddName,customerAddPhone);
-        cs.addCustomer(csAdd);
+        try {
+            cs.addCustomer(csAdd);
+        }
+        catch(DuplicateIdException e){
+            System.out.println(e.getMessage());
+        }
     }
     private void SearchCustomerMenu(){
         System.out.println("آیدی کاربر را وارد کنید");
         int customerSearchId=input.nextInt();
-        cs.FindCustomerById(customerSearchId);
+        try {
+            cs.FindCustomerById(customerSearchId);
+        }
+        catch(CustomerNotFoundException e){
+            System.out.println(e.getMessage());
+        }
     }
     private void EditCustomerMenu(){
         System.out.println("آیدی مشتری را وارد کنید");
@@ -69,13 +80,23 @@ public class CustomerMenu {
         System.out.println("شماره تلفن جدید را وارد کنید");
         String customerEditPhoneNumber=input.nextLine();
         Customer csEdit=new Customer(customerEditId,customerEditName,customerEditPhoneNumber);
-        cs.editCustomer(csEdit);
+        try {
+            cs.editCustomer(csEdit);
+        }
+        catch(CustomerNotFoundException e){
+            System.out.println(e.getMessage());
+        }
     }
     private void DeleteCustomerMenu(){
         System.out.println("آیدی مشتری را وارد کنید");
         int customerRemoveId=input.nextInt();
         Customer csRemove=cs.FindCustomerById(customerRemoveId);
-        cs.removeCustomer(csRemove);
+        try {
+            cs.removeCustomer(csRemove);
+        }
+        catch(CustomerNotFoundException e){
+            System.out.println(e.getMessage());
+        }
     }
 
 

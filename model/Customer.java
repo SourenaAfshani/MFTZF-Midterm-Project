@@ -34,12 +34,7 @@ public class Customer {
     public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
     }
-    void ChangeCsName(String newname){
-        Name=newname;
-    }
-    void ChangeCsPhone(String newphone){
-            Name=newphone;
-   }
+
 }
 
 
