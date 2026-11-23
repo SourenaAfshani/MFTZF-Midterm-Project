@@ -16,7 +16,7 @@ public class CustomerService implements CustomerServiceImpl{
     @Override
     public Customer[] ShowAllCustomers() {
         try (
-                Reader reader = new FileReader("data/customers.csv");
+                Reader reader = new FileReader("src/data/customers.csv");
                 CSVParser parser = CSVFormat.DEFAULT.builder()
                         .setHeader()
                         .setSkipHeaderRecord(true)
